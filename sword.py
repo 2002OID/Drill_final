@@ -25,7 +25,8 @@ def left_up(e):
 def space_down(e):
     return e[0] == 'INPUT' and e[1].type == SDL_KEYDOWN and e[1].key == SDLK_SPACE
 
-
+def time_out(e):
+    return e[0] == 'TIME_OUT'
 
 
 # 수정 예정
@@ -80,8 +81,6 @@ class Idle:
 
     @staticmethod
     def exit(sword, e):
-        if space_down(e):
-            sword.fire_ball()
         pass
 
     @staticmethod
@@ -99,14 +98,44 @@ class Idle:
         pass
         #boy.image.clip_draw(int(boy.frame) * 100, boy.action * 100, 95, 85, boy.x, boy.y)
 
+class Attack:
+    @staticmethod
+    def enter(sword, e):
+        print('attack')
+        sword.delaytime = get_time()
+        sword.x += 5
+        pass
+
+    @staticmethod
+    def exit(sword, e):
+        sword.x -= 5
+        pass
+
+    @staticmethod
+    def update(sword, e):
+        pass
+
+    @staticmethod
+    def do(sword):
+        if get_time() - sword.wait_time > 1:
+            sword.state_machine.handle_event(('TIME_OUT', 0))
+        pass
+        # boy.frame = (boy.frame + FRAMES_PER_ACTION * ACTION_PER_TIME * game_framework.frame_time) % 8
+
+    @staticmethod
+    def draw(sword):
+        pass
+
+
 
 class StateMachine:
     def __init__(self, boy):
         self.sword = boy
         self.cur_state = Idle
         self.transitions = {
-            Idle: {right_down: Run, left_down: Run, left_up: Run, right_up: Run, space_down: Idle},
+            Idle: {right_down: Run, left_down: Run, left_up: Run, right_up: Run, space_down: Attack},
             Run: {right_down: Idle, left_down: Idle, right_up: Idle, left_up: Idle, space_down: Run},
+            Attack: {time_out: Idle}
         }
 
     def start(self):
@@ -136,9 +165,11 @@ class Sword:
         # self.action = 3
         self.face_dir = 1
         self.dir = 1
+        self.delaytime = 0
         #self.image = load_image('character.png')
         self.state_machine = StateMachine(self)
         self.state_machine.start()
+
 
     def update(self):
         self.state_machine.update()

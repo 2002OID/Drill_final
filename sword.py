@@ -1,6 +1,6 @@
 # 이것은 각 상태들을 객체로 구현한 것임.
 
-from pico2d import get_time, load_image, load_font, clamp, SDL_KEYDOWN, SDL_KEYUP, SDLK_SPACE, SDLK_LEFT, SDLK_RIGHT, \
+from pico2d import get_time, clamp, SDL_KEYDOWN, SDL_KEYUP, SDLK_SPACE, SDLK_LEFT, SDLK_RIGHT, \
     draw_rectangle
 
 import game_world
@@ -43,14 +43,14 @@ FRAMES_PER_ACTION = 6
 class Run:
 
     @staticmethod
-    def enter(boy, e):
+    def enter(sword, e):
         if right_down(e) or left_up(e):  # 오른쪽으로 RUN
-            boy.dir, boy.action, boy.face_dir = 1, 1, 1
+            sword.dir, sword.action, sword.face_dir = 1, 1, 1
         elif left_down(e) or right_up(e):  # 왼쪽으로 RUN
-            boy.dir, boy.action, boy.face_dir = -1, 0, -1
+            sword.dir, sword.action, sword.face_dir = -1, 0, -1
 
     @staticmethod
-    def exit(boy, e):
+    def exit(sword, e):
 
         pass
 
@@ -62,27 +62,26 @@ class Run:
         #boy.frame = (boy.frame + FRAMES_PER_ACTION * ACTION_PER_TIME * game_framework.frame_time) % 8
 
     @staticmethod
-    def draw(boy):
-
+    def draw(sword):
         pass#boy.image.clip_draw(int(boy.frame) * 95, 1040 - 350, 95, 85, boy.x, boy.y)
 
 class Idle:
 
     @staticmethod
-    def enter(boy, e):
-        if boy.face_dir == -1:
-            boy.action = 2
-        elif boy.face_dir == 1:
-            boy.action = 3
-        boy.dir = 0
-        boy.frame = 0
-        boy.wait_time = get_time()  # pico2d import 필요
+    def enter(sword, e):
+        if sword.face_dir == -1:
+            sword.action = 2
+        elif sword.face_dir == 1:
+            sword.action = 3
+        sword.dir = 0
+        sword.frame = 0
+        sword.wait_time = get_time()  # pico2d import 필요
         pass
 
     @staticmethod
-    def exit(boy, e):
+    def exit(sword, e):
         if space_down(e):
-            boy.fire_ball()
+            sword.fire_ball()
         pass
 
     @staticmethod
@@ -90,13 +89,13 @@ class Idle:
         pass
 
     @staticmethod
-    def do(boy):
+    def do(sword):
         pass
         #boy.frame = (boy.frame + FRAMES_PER_ACTION * ACTION_PER_TIME * game_framework.frame_time) % 8
 
 
     @staticmethod
-    def draw(boy):
+    def draw(sword):
         pass
         #boy.image.clip_draw(int(boy.frame) * 100, boy.action * 100, 95, 85, boy.x, boy.y)
 
@@ -152,7 +151,7 @@ class Sword:
         draw_rectangle(*self.get_bb())
 
     def get_bb(self):
-        return self.x - 20, self.y - 10, self.x + 20, self.y + 10
+        return self.x - 20, self.y - 10, self.x + 15, self.y + 10
 
     def handle_collision(self, group, other):
         pass

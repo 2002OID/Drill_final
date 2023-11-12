@@ -7,9 +7,6 @@ import game_world
 import game_framework
 
 
-# state event check
-# ( state event type, event value )
-
 def right_down(e):
     return e[0] == 'INPUT' and e[1].type == SDL_KEYDOWN and e[1].key == SDLK_RIGHT
 
@@ -48,62 +45,62 @@ FRAMES_PER_ACTION = 6
 class Idle:
 
     @staticmethod
-    def enter(boy, e):
-        if boy.face_dir == -1:
-            boy.action = 2
-        elif boy.face_dir == 1:
-            boy.action = 3
-        boy.dir = 0
-        boy.frame = 0
-        boy.wait_time = get_time()  # pico2d import 필요
+    def enter(player, e):
+        if player.face_dir == -1:
+            player.action = 2
+        elif player.face_dir == 1:
+            player.action = 3
+        player.dir = 0
+        player.frame = 0
+        player.wait_time = get_time()  # pico2d import 필요
         pass
 
     @staticmethod
-    def exit(boy, e):
+    def exit(player, e):
         if space_down(e):
-            boy.fire_ball()
+            player.fire_ball()
         pass
 
     @staticmethod
-    def do(boy):
+    def do(player):
         pass
         #boy.frame = (boy.frame + FRAMES_PER_ACTION * ACTION_PER_TIME * game_framework.frame_time) % 8
 
 
     @staticmethod
-    def draw(boy):
-        boy.image.clip_draw(int(boy.frame) * 100, boy.action * 100, 95, 85, boy.x, boy.y)
+    def draw(player):
+        player.image.clip_draw(int(player.frame) * 100, player.action * 100, 95, 85, player.x, player.y)
 
 
 class Run:
 
     @staticmethod
-    def enter(boy, e):
+    def enter(player, e):
         if right_down(e) or left_up(e):  # 오른쪽으로 RUN
-            boy.dir, boy.action, boy.face_dir = 1, 1, 1
+            player.dir, player.action, player.face_dir = 1, 1, 1
         elif left_down(e) or right_up(e):  # 왼쪽으로 RUN
-            boy.dir, boy.action, boy.face_dir = -1, 0, -1
+            player.dir, player.action, player.face_dir = -1, 0, -1
 
     @staticmethod
-    def exit(boy, e):
+    def exit(player, e):
 
         pass
 
     @staticmethod
-    def do(boy):
+    def do(player):
         # boy.frame = (boy.frame + 1) % 8
-        boy.x += boy.dir * RUN_SPEED_PPS * game_framework.frame_time
-        boy.x = clamp(25, boy.x, 1600 - 25)
+        player.x += player.dir * RUN_SPEED_PPS * game_framework.frame_time
+        player.x = clamp(25, player.x, 1600 - 25)
         #boy.frame = (boy.frame + FRAMES_PER_ACTION * ACTION_PER_TIME * game_framework.frame_time) % 8
 
     @staticmethod
-    def draw(boy):
-        boy.image.clip_draw(int(boy.frame) * 95, 1040 - 350, 95, 85, boy.x, boy.y)
+    def draw(player):
+        player.image.clip_draw(int(player.frame) * 95, 1040 - 350, 95, 85, player.x, player.y)
 
 
 class StateMachine:
-    def __init__(self, boy):
-        self.boy = boy
+    def __init__(self, player):
+        self.player = player
         self.cur_state = Idle
         self.transitions = {
             Idle: {right_down: Run, left_down: Run, left_up: Run, right_up: Run, space_down: Idle},
@@ -112,26 +109,26 @@ class StateMachine:
         }
 
     def start(self):
-        self.cur_state.enter(self.boy, ('NONE', 0))
+        self.cur_state.enter(self.player, ('NONE', 0))
 
     def update(self):
-        self.cur_state.do(self.boy)
+        self.cur_state.do(self.player)
 
     def handle_event(self, e):
         for check_event, next_state in self.transitions[self.cur_state].items():
             if check_event(e):
-                self.cur_state.exit(self.boy, e)
+                self.cur_state.exit(self.player, e)
                 self.cur_state = next_state
-                self.cur_state.enter(self.boy, e)
+                self.cur_state.enter(self.player, e)
                 return True
 
         return False
 
     def draw(self):
-        self.cur_state.draw(self.boy)
+        self.cur_state.draw(self.player)
 
 
-class Player1:
+class Player:
     def __init__(self):
         self.x, self.y = 50, 90
         self.frame = 0

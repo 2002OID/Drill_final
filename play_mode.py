@@ -5,7 +5,7 @@ import game_framework
 
 import game_world
 from field import Field
-from player1 import Player1
+from player import Player
 from sword import Sword
 
 
@@ -25,7 +25,7 @@ def init():
     global field
     global sword
 
-    player1 = Player1()
+    player1 = Player()
     game_world.add_object(player1, 1)
 
     field = Field()

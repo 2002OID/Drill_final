@@ -8,7 +8,6 @@ from player1 import Player1
 
 
 
-# boy = None
 
 def handle_events():
     events = get_events()

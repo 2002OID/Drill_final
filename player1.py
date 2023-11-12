@@ -30,11 +30,6 @@ def space_down(e):
     return e[0] == 'INPUT' and e[1].type == SDL_KEYDOWN and e[1].key == SDLK_SPACE
 
 
-def time_out(e):
-    return e[0] == 'TIME_OUT'
-
-
-# time_out = lambda e : e[0] == 'TIME_OUT'
 
 
 # 수정 예정
@@ -47,7 +42,7 @@ RUN_SPEED_PPS = (RUN_SPEED_MPS * PIXEL_PER_METER)
 # Boy Action Speed
 TIME_PER_ACTION = 0.5
 ACTION_PER_TIME = 1.0 / TIME_PER_ACTION
-FRAMES_PER_ACTION = 8
+FRAMES_PER_ACTION = 6
 
 
 class Idle:
@@ -71,9 +66,9 @@ class Idle:
 
     @staticmethod
     def do(boy):
-        boy.frame = (boy.frame + FRAMES_PER_ACTION * ACTION_PER_TIME * game_framework.frame_time) % 8
-        if get_time() - boy.wait_time > 2:
-            boy.state_machine.handle_event(('TIME_OUT', 0))
+        pass
+        #boy.frame = (boy.frame + FRAMES_PER_ACTION * ACTION_PER_TIME * game_framework.frame_time) % 8
+
 
     @staticmethod
     def draw(boy):
@@ -91,8 +86,6 @@ class Run:
 
     @staticmethod
     def exit(boy, e):
-        if space_down(e):
-            boy.fire_ball()
 
         pass
 
@@ -101,38 +94,11 @@ class Run:
         # boy.frame = (boy.frame + 1) % 8
         boy.x += boy.dir * RUN_SPEED_PPS * game_framework.frame_time
         boy.x = clamp(25, boy.x, 1600 - 25)
-        boy.frame = (boy.frame + FRAMES_PER_ACTION * ACTION_PER_TIME * game_framework.frame_time) % 8
+        #boy.frame = (boy.frame + FRAMES_PER_ACTION * ACTION_PER_TIME * game_framework.frame_time) % 8
 
     @staticmethod
     def draw(boy):
-        boy.image.clip_draw(int(boy.frame) * 100, boy.action * 100, 100, 100, boy.x, boy.y)
-
-
-# class Sleep:
-#
-#     @staticmethod
-#     def enter(boy, e):
-#         boy.frame = 0
-#         pass
-#
-#     @staticmethod
-#     def exit(boy, e):
-#         pass
-#
-#     @staticmethod
-#     def do(boy):
-#         pass
-#         #boy.frame = (boy.frame + FRAMES_PER_ACTION * ACTION_PER_TIME * game_framework.frame_time) % 8
-#
-#
-#     @staticmethod
-#     def draw(player1):
-#         if player1.face_dir == -1:
-#             player1.image.clip_composite_draw(int(player1.frame) * 100, 200, 100, 100,
-#                                               -3.141592 / 2, '', player1.x + 25, player1.y - 25, 100, 100)
-#         else:
-#             player1.image.clip_composite_draw(int(player1.frame) * 100, 300, 100, 100,
-#                                               3.141592 / 2, '', player1.x - 25, player1.y - 25, 100, 100)
+        boy.image.clip_draw(int(boy.frame) * 95, 1040 - 350, 95, 85, boy.x, boy.y)
 
 
 class StateMachine:

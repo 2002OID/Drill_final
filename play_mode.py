@@ -4,6 +4,7 @@ from pico2d import *
 import game_framework
 
 import game_world
+from field import Field
 from player1 import Player1
 
 
@@ -21,10 +22,13 @@ def handle_events():
 
 def init():
     global player1
+    global field
 
     player1 = Player1()
     game_world.add_object(player1, 1)
 
+    field = Field()
+    game_world.add_object(field, 0)
 
 
 def finish():

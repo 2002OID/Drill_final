@@ -153,7 +153,7 @@ class Player1:
         draw_rectangle(*self.get_bb())
 
     def get_bb(self):
-        return self.x - 20, self.y - 45, self.x + 20, self.y + 45
+        return self.x - 35, self.y - 40, self.x + 10, self.y + 35
 
     def handle_collision(self, group, other):
         pass

@@ -6,10 +6,6 @@ from pico2d import get_time, load_image, load_font, clamp, SDL_KEYDOWN, SDL_KEYU
 import game_world
 import game_framework
 
-
-# state event check
-# ( state event type, event value )
-
 def right_down(e):
     return e[0] == 'INPUT' and e[1].type == SDL_KEYDOWN and e[1].key == SDLK_RIGHT
 
@@ -44,6 +40,31 @@ TIME_PER_ACTION = 0.5
 ACTION_PER_TIME = 1.0 / TIME_PER_ACTION
 FRAMES_PER_ACTION = 6
 
+class Run:
+
+    @staticmethod
+    def enter(boy, e):
+        if right_down(e) or left_up(e):  # 오른쪽으로 RUN
+            boy.dir, boy.action, boy.face_dir = 1, 1, 1
+        elif left_down(e) or right_up(e):  # 왼쪽으로 RUN
+            boy.dir, boy.action, boy.face_dir = -1, 0, -1
+
+    @staticmethod
+    def exit(boy, e):
+
+        pass
+
+    @staticmethod
+    def do(sword):
+        # boy.frame = (boy.frame + 1) % 8
+        sword.x += sword.dir * RUN_SPEED_PPS * game_framework.frame_time
+        sword.x = clamp(25, sword.x, 1600 - 25)
+        #boy.frame = (boy.frame + FRAMES_PER_ACTION * ACTION_PER_TIME * game_framework.frame_time) % 8
+
+    @staticmethod
+    def draw(boy):
+
+        pass#boy.image.clip_draw(int(boy.frame) * 95, 1040 - 350, 95, 85, boy.x, boy.y)
 
 class Idle:
 
@@ -65,6 +86,10 @@ class Idle:
         pass
 
     @staticmethod
+    def update(sword, e):
+        pass
+
+    @staticmethod
     def do(boy):
         pass
         #boy.frame = (boy.frame + FRAMES_PER_ACTION * ACTION_PER_TIME * game_framework.frame_time) % 8
@@ -72,73 +97,47 @@ class Idle:
 
     @staticmethod
     def draw(boy):
-        boy.image.clip_draw(int(boy.frame) * 100, boy.action * 100, 95, 85, boy.x, boy.y)
-
-
-class Run:
-
-    @staticmethod
-    def enter(boy, e):
-        if right_down(e) or left_up(e):  # 오른쪽으로 RUN
-            boy.dir, boy.action, boy.face_dir = 1, 1, 1
-        elif left_down(e) or right_up(e):  # 왼쪽으로 RUN
-            boy.dir, boy.action, boy.face_dir = -1, 0, -1
-
-    @staticmethod
-    def exit(boy, e):
-
         pass
-
-    @staticmethod
-    def do(boy):
-        # boy.frame = (boy.frame + 1) % 8
-        boy.x += boy.dir * RUN_SPEED_PPS * game_framework.frame_time
-        boy.x = clamp(25, boy.x, 1600 - 25)
-        #boy.frame = (boy.frame + FRAMES_PER_ACTION * ACTION_PER_TIME * game_framework.frame_time) % 8
-
-    @staticmethod
-    def draw(boy):
-        boy.image.clip_draw(int(boy.frame) * 95, 1040 - 350, 95, 85, boy.x, boy.y)
+        #boy.image.clip_draw(int(boy.frame) * 100, boy.action * 100, 95, 85, boy.x, boy.y)
 
 
 class StateMachine:
     def __init__(self, boy):
-        self.boy = boy
+        self.sword = boy
         self.cur_state = Idle
         self.transitions = {
             Idle: {right_down: Run, left_down: Run, left_up: Run, right_up: Run, space_down: Idle},
             Run: {right_down: Idle, left_down: Idle, right_up: Idle, left_up: Idle, space_down: Run},
-
         }
 
     def start(self):
-        self.cur_state.enter(self.boy, ('NONE', 0))
+        self.cur_state.enter(self.sword, ('NONE', 0))
 
     def update(self):
-        self.cur_state.do(self.boy)
+        self.cur_state.do(self.sword)
 
     def handle_event(self, e):
         for check_event, next_state in self.transitions[self.cur_state].items():
             if check_event(e):
-                self.cur_state.exit(self.boy, e)
+                self.cur_state.exit(self.sword, e)
                 self.cur_state = next_state
-                self.cur_state.enter(self.boy, e)
+                self.cur_state.enter(self.sword, e)
                 return True
 
         return False
 
     def draw(self):
-        self.cur_state.draw(self.boy)
+        self.cur_state.draw(self.sword)
 
 
-class Player1:
-    def __init__(self):
-        self.x, self.y = 50, 90
+class Sword:
+    def __init__(self, manx, many):
+        self.x, self.y = manx + 30, many
         self.frame = 0
         # self.action = 3
         self.face_dir = 1
         self.dir = 1
-        self.image = load_image('character.png')
+        #self.image = load_image('character.png')
         self.state_machine = StateMachine(self)
         self.state_machine.start()
 
@@ -153,7 +152,7 @@ class Player1:
         draw_rectangle(*self.get_bb())
 
     def get_bb(self):
-        return self.x - 35, self.y - 40, self.x + 10, self.y + 35
+        return self.x - 20, self.y - 10, self.x + 20, self.y + 10
 
     def handle_collision(self, group, other):
         pass

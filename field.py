@@ -13,4 +13,4 @@ class Field:
 
 
     def get_bb(self):
-        return 0, 0, 1600 - 1, 50
+        return 0, 0, 1200 - 1, 55

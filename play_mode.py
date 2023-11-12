@@ -6,8 +6,7 @@ import game_framework
 import game_world
 from field import Field
 from player1 import Player1
-
-
+from sword import Sword
 
 
 def handle_events():
@@ -19,16 +18,21 @@ def handle_events():
             game_framework.quit()
         else:
             player1.handle_event(event)
+            sword.handle_event(event)
 
 def init():
     global player1
     global field
+    global sword
 
     player1 = Player1()
     game_world.add_object(player1, 1)
 
     field = Field()
     game_world.add_object(field, 0)
+
+    sword = Sword(player1.x, player1.y)
+    game_world.add_object(sword, 1)
 
 
 def finish():

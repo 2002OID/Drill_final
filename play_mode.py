@@ -7,6 +7,7 @@ import game_world
 from player1 import Player1
 
 
+
 # boy = None
 
 def handle_events():
@@ -17,10 +18,11 @@ def handle_events():
         elif event.type == SDL_KEYDOWN and event.key == SDLK_ESCAPE:
             game_framework.quit()
         else:
-            pass
-            #boy.handle_event(event)
+            player1.handle_event(event)
 
 def init():
+    global player1
+
     player1 = Player1()
     game_world.add_object(player1, 1)
 

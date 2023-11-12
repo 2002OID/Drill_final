@@ -6,6 +6,7 @@ from pico2d import get_time, load_image, load_font, clamp, SDL_KEYDOWN, SDL_KEYU
 import game_world
 import game_framework
 
+
 # state event check
 # ( state event type, event value )
 
@@ -24,15 +25,16 @@ def left_down(e):
 def left_up(e):
     return e[0] == 'INPUT' and e[1].type == SDL_KEYUP and e[1].key == SDLK_LEFT
 
+
 def space_down(e):
     return e[0] == 'INPUT' and e[1].type == SDL_KEYDOWN and e[1].key == SDLK_SPACE
+
 
 def time_out(e):
     return e[0] == 'TIME_OUT'
 
+
 # time_out = lambda e : e[0] == 'TIME_OUT'
-
-
 
 
 # 수정 예정
@@ -48,15 +50,6 @@ ACTION_PER_TIME = 1.0 / TIME_PER_ACTION
 FRAMES_PER_ACTION = 8
 
 
-
-
-
-
-
-
-
-
-
 class Idle:
 
     @staticmethod
@@ -67,7 +60,7 @@ class Idle:
             boy.action = 3
         boy.dir = 0
         boy.frame = 0
-        boy.wait_time = get_time() # pico2d import 필요
+        boy.wait_time = get_time()  # pico2d import 필요
         pass
 
     @staticmethod
@@ -87,14 +80,13 @@ class Idle:
         boy.image.clip_draw(int(boy.frame) * 100, boy.action * 100, 100, 100, boy.x, boy.y)
 
 
-
 class Run:
 
     @staticmethod
     def enter(boy, e):
-        if right_down(e) or left_up(e): # 오른쪽으로 RUN
+        if right_down(e) or left_up(e):  # 오른쪽으로 RUN
             boy.dir, boy.action, boy.face_dir = 1, 1, 1
-        elif left_down(e) or right_up(e): # 왼쪽으로 RUN
+        elif left_down(e) or right_up(e):  # 왼쪽으로 RUN
             boy.dir, boy.action, boy.face_dir = -1, 0, -1
 
     @staticmethod
@@ -108,40 +100,39 @@ class Run:
     def do(boy):
         # boy.frame = (boy.frame + 1) % 8
         boy.x += boy.dir * RUN_SPEED_PPS * game_framework.frame_time
-        boy.x = clamp(25, boy.x, 1600-25)
+        boy.x = clamp(25, boy.x, 1600 - 25)
         boy.frame = (boy.frame + FRAMES_PER_ACTION * ACTION_PER_TIME * game_framework.frame_time) % 8
-
 
     @staticmethod
     def draw(boy):
         boy.image.clip_draw(int(boy.frame) * 100, boy.action * 100, 100, 100, boy.x, boy.y)
 
 
-
-class Sleep:
-
-    @staticmethod
-    def enter(boy, e):
-        boy.frame = 0
-        pass
-
-    @staticmethod
-    def exit(boy, e):
-        pass
-
-    @staticmethod
-    def do(boy):
-        boy.frame = (boy.frame + FRAMES_PER_ACTION * ACTION_PER_TIME * game_framework.frame_time) % 8
-
-
-    @staticmethod
-    def draw(player1):
-        if player1.face_dir == -1:
-            player1.image.clip_composite_draw(int(player1.frame) * 100, 200, 100, 100,
-                                              -3.141592 / 2, '', player1.x + 25, player1.y - 25, 100, 100)
-        else:
-            player1.image.clip_composite_draw(int(player1.frame) * 100, 300, 100, 100,
-                                              3.141592 / 2, '', player1.x - 25, player1.y - 25, 100, 100)
+# class Sleep:
+#
+#     @staticmethod
+#     def enter(boy, e):
+#         boy.frame = 0
+#         pass
+#
+#     @staticmethod
+#     def exit(boy, e):
+#         pass
+#
+#     @staticmethod
+#     def do(boy):
+#         pass
+#         #boy.frame = (boy.frame + FRAMES_PER_ACTION * ACTION_PER_TIME * game_framework.frame_time) % 8
+#
+#
+#     @staticmethod
+#     def draw(player1):
+#         if player1.face_dir == -1:
+#             player1.image.clip_composite_draw(int(player1.frame) * 100, 200, 100, 100,
+#                                               -3.141592 / 2, '', player1.x + 25, player1.y - 25, 100, 100)
+#         else:
+#             player1.image.clip_composite_draw(int(player1.frame) * 100, 300, 100, 100,
+#                                               3.141592 / 2, '', player1.x - 25, player1.y - 25, 100, 100)
 
 
 class StateMachine:
@@ -149,9 +140,9 @@ class StateMachine:
         self.boy = boy
         self.cur_state = Idle
         self.transitions = {
-            Idle: {right_down: Run, left_down: Run, left_up: Run, right_up: Run, time_out: Sleep, space_down: Idle},
+            Idle: {right_down: Run, left_down: Run, left_up: Run, right_up: Run, space_down: Idle},
             Run: {right_down: Idle, left_down: Idle, right_up: Idle, left_up: Idle, space_down: Run},
-            Sleep: {right_down: Run, left_down: Run, right_up: Run, left_up: Run}
+
         }
 
     def start(self):
@@ -174,20 +165,16 @@ class StateMachine:
         self.cur_state.draw(self.boy)
 
 
-
-
-
 class Player1:
     def __init__(self):
         self.x, self.y = 50, 90
         self.frame = 0
-        #self.action = 3
+        # self.action = 3
         self.face_dir = 1
         self.dir = 1
         self.image = load_image('character.png')
         self.state_machine = StateMachine(self)
         self.state_machine.start()
-
 
     def update(self):
         self.state_machine.update()

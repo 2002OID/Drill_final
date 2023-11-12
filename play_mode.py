@@ -4,6 +4,8 @@ from pico2d import *
 import game_framework
 
 import game_world
+from player1 import Player1
+
 
 # boy = None
 
@@ -19,7 +21,8 @@ def handle_events():
             #boy.handle_event(event)
 
 def init():
-    pass
+    player1 = Player1()
+    game_world.add_object(player1, 1)
 
 
 

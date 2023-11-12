@@ -32,8 +32,8 @@ def time_out(e):
 
 
 # 수정 예정
-PIXEL_PER_METER = (10.0 / 0.3)  # 10 pixel 30 cm
-RUN_SPEED_KMPH = 20.0  # Km / Hour
+PIXEL_PER_METER = (1200.0 / 14.0)  # 10 pixel 30 cm
+RUN_SPEED_KMPH = 10.0  # Km / Hour
 RUN_SPEED_MPM = (RUN_SPEED_KMPH * 1000.0 / 60.0)
 RUN_SPEED_MPS = (RUN_SPEED_MPM / 60.0)
 RUN_SPEED_PPS = (RUN_SPEED_MPS * PIXEL_PER_METER)
@@ -69,7 +69,7 @@ class Idle:
 
     @staticmethod
     def draw(player):
-        player.image.clip_draw(int(player.frame) * 100, player.action * 100, 95, 85, player.x, player.y)
+        player.image.clip_composite_draw(int(player.frame) * 95, 1040 - 350, 95, 85, 0, '',  player.x, player.y, 95 * 2, 85 * 2)
 
 
 class Run:
@@ -95,7 +95,7 @@ class Run:
 
     @staticmethod
     def draw(player):
-        player.image.clip_draw(int(player.frame) * 95, 1040 - 350, 95, 85, player.x, player.y)
+        player.image.clip_composite_draw(int(player.frame) * 95, 1040 - 350, 95, 85, 0, '',  player.x, player.y, 95 * 2, 85 * 2)
 
 
 class Attack:
@@ -122,7 +122,7 @@ class Attack:
 
     @staticmethod
     def draw(player):
-        player.image.clip_draw(int(player.frame) * 95, 1040 - 350, 95, 85, player.x, player.y)
+        player.image.clip_composite_draw(int(player.frame) * 95, 1040 - 350, 95, 85, 0, '',  player.x, player.y, 95 * 2, 85 * 2)
 
 
 class StateMachine:
@@ -157,7 +157,7 @@ class StateMachine:
 
 class Player:
     def __init__(self):
-        self.x, self.y = 50, 90
+        self.x, self.y = 150, 140
         self.frame = 0
         # self.action = 3
         self.face_dir = 1
@@ -178,7 +178,7 @@ class Player:
         draw_rectangle(*self.get_bb())
 
     def get_bb(self):
-        return self.x - 35, self.y - 40, self.x + 10, self.y + 35
+        return self.x - 70, self.y - 60, self.x + 20, self.y + 70
 
     def handle_collision(self, group, other):
         pass

@@ -30,8 +30,8 @@ def time_out(e):
 
 
 # 수정 예정
-PIXEL_PER_METER = (10.0 / 0.3)  # 10 pixel 30 cm
-RUN_SPEED_KMPH = 20.0  # Km / Hour
+PIXEL_PER_METER = (1200.0 / 14.0)  # 10 pixel 30 cm
+RUN_SPEED_KMPH = 10.0  # Km / Hour
 RUN_SPEED_MPM = (RUN_SPEED_KMPH * 1000.0 / 60.0)
 RUN_SPEED_MPS = (RUN_SPEED_MPM / 60.0)
 RUN_SPEED_PPS = (RUN_SPEED_MPS * PIXEL_PER_METER)
@@ -103,12 +103,12 @@ class Attack:
     def enter(sword, e):
         print('attack')
         sword.delaytime = get_time()
-        sword.x += 5
+        sword.x += 10
         pass
 
     @staticmethod
     def exit(sword, e):
-        sword.x -= 5
+        sword.x -= 10
         pass
 
     @staticmethod
@@ -182,7 +182,7 @@ class Sword:
         draw_rectangle(*self.get_bb())
 
     def get_bb(self):
-        return self.x - 20, self.y - 10, self.x + 15, self.y + 10
+        return self.x - 10, self.y - 10, self.x + 60, self.y + 20
 
     def handle_collision(self, group, other):
         pass

@@ -1,7 +1,7 @@
 # 이것은 각 상태들을 객체로 구현한 것임.
 
 from pico2d import get_time, clamp, SDL_KEYDOWN, SDL_KEYUP, SDLK_SPACE, SDLK_LEFT, SDLK_RIGHT, \
-    draw_rectangle
+    draw_rectangle, delay
 
 import game_world
 import game_framework
@@ -70,21 +70,19 @@ class Idle:
 
     @staticmethod
     def enter(sword, e):
-        if sword.face_dir == -1:
-            sword.action = 2
-        elif sword.face_dir == 1:
-            sword.action = 3
-        sword.dir = 0
-        sword.frame = 0
-        sword.wait_time = get_time()  # pico2d import 필요
+
         pass
 
     @staticmethod
     def exit(sword, e):
+        if space_down(e):
+            sword.attack()
+
         pass
 
     @staticmethod
     def update(sword, e):
+
         pass
 
     @staticmethod
@@ -98,44 +96,15 @@ class Idle:
         pass
         #boy.image.clip_draw(int(boy.frame) * 100, boy.action * 100, 95, 85, boy.x, boy.y)
 
-class Attack:
-    @staticmethod
-    def enter(sword, e):
-        print('attack')
-        sword.delaytime = get_time()
-        sword.x += 10
-        pass
-
-    @staticmethod
-    def exit(sword, e):
-        sword.x -= 10
-        pass
-
-    @staticmethod
-    def update(sword, e):
-        pass
-
-    @staticmethod
-    def do(sword):
-        if get_time() - sword.wait_time > 1:
-            sword.state_machine.handle_event(('TIME_OUT', 0))
-        pass
-        # boy.frame = (boy.frame + FRAMES_PER_ACTION * ACTION_PER_TIME * game_framework.frame_time) % 8
-
-    @staticmethod
-    def draw(sword):
-        pass
-
-
 
 class StateMachine:
     def __init__(self, boy):
         self.sword = boy
         self.cur_state = Idle
         self.transitions = {
-            Idle: {right_down: Run, left_down: Run, left_up: Run, right_up: Run, space_down: Attack},
+            Idle: {right_down: Run, left_down: Run, left_up: Run, right_up: Run, space_down: Idle},
             Run: {right_down: Idle, left_down: Idle, right_up: Idle, left_up: Idle, space_down: Run},
-            Attack: {time_out: Idle}
+
         }
 
     def start(self):
@@ -183,6 +152,12 @@ class Sword:
 
     def get_bb(self):
         return self.x - 10, self.y - 10, self.x + 60, self.y + 20
+
+    def attack(self):
+        self.x += 20
+        self.update()
+        self.draw()
+        self.x -= 20
 
     def handle_collision(self, group, other):
         pass

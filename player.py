@@ -6,7 +6,8 @@ from pico2d import get_time, load_image, load_font, clamp, SDL_KEYDOWN, SDL_KEYU
 import game_world
 import game_framework
 
-
+sheet_x = 379
+sheet_y = 408
 def right_down(e):
     return e[0] == 'INPUT' and e[1].type == SDL_KEYDOWN and e[1].key == SDLK_RIGHT
 
@@ -41,7 +42,7 @@ RUN_SPEED_PPS = (RUN_SPEED_MPS * PIXEL_PER_METER)
 # Boy Action Speed
 TIME_PER_ACTION = 0.5
 ACTION_PER_TIME = 1.0 / TIME_PER_ACTION
-FRAMES_PER_ACTION = 6
+FRAMES_PER_ACTION = 3
 
 
 class Idle:
@@ -69,7 +70,7 @@ class Idle:
 
     @staticmethod
     def draw(player):
-        player.image.clip_composite_draw(int(player.frame) * 95, 1040 - 350, 95, 85, 0, '',  player.x, player.y, 95 * 2, 85 * 2)
+        player.image.clip_composite_draw(int(player.frame) * 45, (sheet_y // 6) * 5 , 45, sheet_y // 6, 0, '',  player.x, player.y, 45 * 2, sheet_y // 6 * 2)
 
 
 class Run:
@@ -98,31 +99,6 @@ class Run:
         player.image.clip_composite_draw(int(player.frame) * 95, 1040 - 350, 95, 85, 0, '',  player.x, player.y, 95 * 2, 85 * 2)
 
 
-class Attack:
-    @staticmethod
-    def enter(player, e):
-        print('attack')
-        player.delaytime = get_time()
-        pass
-
-    @staticmethod
-    def exit(player, e):
-        pass
-
-    @staticmethod
-    def update(player, e):
-        pass
-
-    @staticmethod
-    def do(player):
-        if get_time() - player.wait_time > 1:
-            player.state_machine.handle_event(('TIME_OUT', 0))
-        pass
-        # boy.frame = (boy.frame + FRAMES_PER_ACTION * ACTION_PER_TIME * game_framework.frame_time) % 8
-
-    @staticmethod
-    def draw(player):
-        player.image.clip_composite_draw(int(player.frame) * 95, 1040 - 350, 95, 85, 0, '',  player.x, player.y, 95 * 2, 85 * 2)
 
 
 class StateMachine:
@@ -130,9 +106,9 @@ class StateMachine:
         self.player = player
         self.cur_state = Idle
         self.transitions = {
-            Idle: {right_down: Run, left_down: Run, left_up: Run, right_up: Run, space_down: Attack},
+            Idle: {right_down: Run, left_down: Run, left_up: Run, right_up: Run},
             Run: {right_down: Idle, left_down: Idle, right_up: Idle, left_up: Idle, space_down: Run},
-            Attack: {time_out: Idle}
+
         }
 
     def start(self):

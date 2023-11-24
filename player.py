@@ -1,31 +1,34 @@
 # 이것은 각 상태들을 객체로 구현한 것임.
 
 from pico2d import get_time, load_image, load_font, clamp, SDL_KEYDOWN, SDL_KEYUP, SDLK_SPACE, SDLK_LEFT, SDLK_RIGHT, \
-    draw_rectangle
+    draw_rectangle, SDLK_w, SDLK_a, SDLK_d
 
 import game_world
 import game_framework
 
 sheet_x = 379
 sheet_y = 408
-def right_down(e):
-    return e[0] == 'INPUT' and e[1].type == SDL_KEYDOWN and e[1].key == SDLK_RIGHT
+def d_down(e):
+    return e[0] == 'INPUT' and e[1].type == SDL_KEYDOWN and e[1].key == SDLK_d
 
 
-def right_up(e):
-    return e[0] == 'INPUT' and e[1].type == SDL_KEYUP and e[1].key == SDLK_RIGHT
+def d_up(e):
+    return e[0] == 'INPUT' and e[1].type == SDL_KEYUP and e[1].key == SDLK_d
 
 
-def left_down(e):
-    return e[0] == 'INPUT' and e[1].type == SDL_KEYDOWN and e[1].key == SDLK_LEFT
+def a_down(e):
+    return e[0] == 'INPUT' and e[1].type == SDL_KEYDOWN and e[1].key == SDLK_a
 
 
-def left_up(e):
-    return e[0] == 'INPUT' and e[1].type == SDL_KEYUP and e[1].key == SDLK_LEFT
+def a_up(e):
+    return e[0] == 'INPUT' and e[1].type == SDL_KEYUP and e[1].key == SDLK_a
 
 
-def space_down(e):
-    return e[0] == 'INPUT' and e[1].type == SDL_KEYDOWN and e[1].key == SDLK_SPACE
+def w_down(e):
+    return e[0] == 'INPUT' and e[1].type == SDL_KEYDOWN and e[1].key == SDLK_w
+
+def time_out(e):
+    return e[0] == 'TIME_OUT'
 
 def time_out(e):
     return e[0] == 'TIME_OUT'
@@ -77,9 +80,9 @@ class Run:
 
     @staticmethod
     def enter(player, e):
-        if right_down(e) or left_up(e):  # 오른쪽으로 RUN
+        if d_down(e) or a_up(e):  # 오른쪽으로 RUN
             player.dir, player.action, player.face_dir = 1, 1, 1
-        elif left_down(e) or right_up(e):  # 왼쪽으로 RUN
+        elif a_down(e) or d_up(e):  # 왼쪽으로 RUN
             player.dir, player.action, player.face_dir = -1, 0, -1
 
     @staticmethod
@@ -96,7 +99,7 @@ class Run:
 
     @staticmethod
     def draw(player):
-        player.image.clip_composite_draw(int(player.frame) * 95, 1040 - 350, 95, 85, 0, '',  player.x, player.y, 95 * 2, 85 * 2)
+        player.image.clip_composite_draw(int(player.frame) * 45, (sheet_y // 6) * 5 , 45, sheet_y // 6, 0, '',  player.x, player.y, 45 * 2, sheet_y // 6 * 2)
 
 
 
@@ -106,8 +109,8 @@ class StateMachine:
         self.player = player
         self.cur_state = Idle
         self.transitions = {
-            Idle: {right_down: Run, left_down: Run, left_up: Run, right_up: Run},
-            Run: {right_down: Idle, left_down: Idle, right_up: Idle, left_up: Idle, space_down: Run},
+            Idle: {d_down: Run, a_down: Run, a_up: Run, d_up: Run},
+            Run: {d_down: Idle, a_down: Idle, d_up: Idle, a_up: Idle, w_down: Run},
 
         }
 

@@ -1,29 +1,30 @@
 # 이것은 각 상태들을 객체로 구현한 것임.
-
-from pico2d import get_time, clamp, SDL_KEYDOWN, SDL_KEYUP, SDLK_SPACE, SDLK_LEFT, SDLK_RIGHT, \
-    draw_rectangle, delay
+import pico2d
+from pico2d import get_time, clamp, SDL_KEYDOWN, SDL_KEYUP, draw_rectangle, delay, SDLK_w, SDLK_a, SDLK_d
 
 import game_world
 import game_framework
-
-def right_down(e):
-    return e[0] == 'INPUT' and e[1].type == SDL_KEYDOWN and e[1].key == SDLK_RIGHT
+import play_mode
 
 
-def right_up(e):
-    return e[0] == 'INPUT' and e[1].type == SDL_KEYUP and e[1].key == SDLK_RIGHT
+def d_down(e):
+    return e[0] == 'INPUT' and e[1].type == SDL_KEYDOWN and e[1].key == SDLK_d
 
 
-def left_down(e):
-    return e[0] == 'INPUT' and e[1].type == SDL_KEYDOWN and e[1].key == SDLK_LEFT
+def d_up(e):
+    return e[0] == 'INPUT' and e[1].type == SDL_KEYUP and e[1].key == SDLK_d
 
 
-def left_up(e):
-    return e[0] == 'INPUT' and e[1].type == SDL_KEYUP and e[1].key == SDLK_LEFT
+def a_down(e):
+    return e[0] == 'INPUT' and e[1].type == SDL_KEYDOWN and e[1].key == SDLK_a
 
 
-def space_down(e):
-    return e[0] == 'INPUT' and e[1].type == SDL_KEYDOWN and e[1].key == SDLK_SPACE
+def a_up(e):
+    return e[0] == 'INPUT' and e[1].type == SDL_KEYUP and e[1].key == SDLK_a
+
+
+def w_down(e):
+    return e[0] == 'INPUT' and e[1].type == SDL_KEYDOWN and e[1].key == SDLK_w
 
 def time_out(e):
     return e[0] == 'TIME_OUT'
@@ -45,9 +46,9 @@ class Run:
 
     @staticmethod
     def enter(sword, e):
-        if right_down(e) or left_up(e):  # 오른쪽으로 RUN
+        if d_down(e) or a_up(e):  # 오른쪽으로 RUN
             sword.dir, sword.action, sword.face_dir = 1, 1, 1
-        elif left_down(e) or right_up(e):  # 왼쪽으로 RUN
+        elif a_down(e) or d_up(e):  # 왼쪽으로 RUN
             sword.dir, sword.action, sword.face_dir = -1, 0, -1
 
     @staticmethod
@@ -75,7 +76,7 @@ class Idle:
 
     @staticmethod
     def exit(sword, e):
-        if space_down(e):
+        if w_down(e):
             sword.attack()
 
         pass
@@ -102,8 +103,8 @@ class StateMachine:
         self.sword = boy
         self.cur_state = Idle
         self.transitions = {
-            Idle: {right_down: Run, left_down: Run, left_up: Run, right_up: Run, space_down: Idle},
-            Run: {right_down: Idle, left_down: Idle, right_up: Idle, left_up: Idle, space_down: Run},
+            Idle: {d_down: Run, a_down: Run, a_up: Run, d_up: Run, w_down: Idle},
+            Run: {d_down: Idle, a_down: Idle, d_up: Idle, a_up: Idle, w_down: Run},
 
         }
 
@@ -154,9 +155,11 @@ class Sword:
         return self.x - 10, self.y - 10, self.x + 60, self.y + 20
 
     def attack(self):
+        print('attack')
         self.x += 20
-        self.update()
-        self.draw()
+        play_mode.update()
+        play_mode.draw()
+        delay(0.35)
         self.x -= 20
 
     def handle_collision(self, group, other):

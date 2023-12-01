@@ -31,7 +31,7 @@ def init():
     field = Field()
     game_world.add_object(field, 0)
 
-    sword = Sword(player1.x, player1.y)
+    sword = Sword()
     game_world.add_object(sword, 1)
 
 

@@ -73,7 +73,7 @@ class Idle:
 
     @staticmethod
     def draw(player):
-        player.image.clip_composite_draw(int(player.frame) * 45, (sheet_y // 6) * 5 , 45, sheet_y // 6, 0, '',  player.x, player.y, 45 * 2, sheet_y // 6 * 2)
+        player.image.clip_composite_draw(43, (sheet_y // 6) * 5 , 45, sheet_y // 6, 0, '',  player.x, player.y, 45 * 2, sheet_y // 6 * 2)
 
 
 class Run:
@@ -99,7 +99,7 @@ class Run:
 
     @staticmethod
     def draw(player):
-        player.image.clip_composite_draw(int(player.frame) * 45, (sheet_y // 6) * 5 , 45, sheet_y // 6, 0, '',  player.x, player.y, 45 * 2, sheet_y // 6 * 2)
+        player.image.clip_composite_draw(43, (sheet_y // 6) * 5 , 45, sheet_y // 6, 0, '',  player.x, player.y, 45 * 2, sheet_y // 6 * 2)
 
 
 

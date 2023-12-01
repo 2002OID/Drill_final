@@ -46,10 +46,11 @@ class Run:
 
     @staticmethod
     def enter(sword, e):
-        if d_down(e) or a_up(e):  # 오른쪽으로 RUN
-            sword.dir, sword.action, sword.face_dir = 1, 1, 1
-        elif a_down(e) or d_up(e):  # 왼쪽으로 RUN
-            sword.dir, sword.action, sword.face_dir = -1, 0, -1
+        pass
+        # if d_down(e) or a_up(e):  # 오른쪽으로 RUN
+        #     sword.dir, sword.action, sword.face_dir = 1, 1, 1
+        # elif a_down(e) or d_up(e):  # 왼쪽으로 RUN
+        #     sword.dir, sword.action, sword.face_dir = -1, 0, -1
 
     @staticmethod
     def exit(sword, e):
@@ -58,14 +59,15 @@ class Run:
 
     @staticmethod
     def do(sword):
+        sword.x, sword.y = play_mode.player1.x + 30, play_mode.player1.y
         # boy.frame = (boy.frame + 1) % 8
-        sword.x += sword.dir * RUN_SPEED_PPS * game_framework.frame_time
-        sword.x = clamp(25, sword.x, 1600 - 25)
-        #boy.frame = (boy.frame + FRAMES_PER_ACTION * ACTION_PER_TIME * game_framework.frame_time) % 8
+        # sword.x += sword.dir * RUN_SPEED_PPS * game_framework.frame_time
+        # sword.x = clamp(25, sword.x, 1600 - 25)
+
 
     @staticmethod
     def draw(sword):
-        pass#boy.image.clip_draw(int(boy.frame) * 95, 1040 - 350, 95, 85, boy.x, boy.y)
+        pass
 
 class Idle:
 
@@ -89,7 +91,7 @@ class Idle:
     @staticmethod
     def do(sword):
         pass
-        #boy.frame = (boy.frame + FRAMES_PER_ACTION * ACTION_PER_TIME * game_framework.frame_time) % 8
+
 
 
     @staticmethod
@@ -99,8 +101,8 @@ class Idle:
 
 
 class StateMachine:
-    def __init__(self, boy):
-        self.sword = boy
+    def __init__(self, sword):
+        self.sword = sword
         self.cur_state = Idle
         self.transitions = {
             Idle: {d_down: Run, a_down: Run, a_up: Run, d_up: Run, w_down: Idle},
@@ -129,8 +131,8 @@ class StateMachine:
 
 
 class Sword:
-    def __init__(self, manx, many):
-        self.x, self.y = manx + 30, many
+    def __init__(self):
+        self.x, self.y = play_mode.player1.x + 30, play_mode.player1.y
         self.frame = 0
         # self.action = 3
         self.face_dir = 1

@@ -25,11 +25,13 @@ def init():
     global field
     global sword
 
+    field = Field()
+    game_world.add_object(field, 0)
+
     player1 = Player()
     game_world.add_object(player1, 1)
 
-    field = Field()
-    game_world.add_object(field, 0)
+
 
     sword = Sword()
     game_world.add_object(sword, 1)

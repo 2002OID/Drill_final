@@ -49,10 +49,7 @@ class Run:
     @staticmethod
     def enter(sword, e):
         pass
-        # if d_down(e) or a_up(e):  # 오른쪽으로 RUN
-        #     sword.dir, sword.action, sword.face_dir = 1, 1, 1
-        # elif a_down(e) or d_up(e):  # 왼쪽으로 RUN
-        #     sword.dir, sword.action, sword.face_dir = -1, 0, -1
+
 
     @staticmethod
     def exit(sword, e):
@@ -61,9 +58,6 @@ class Run:
     @staticmethod
     def do(sword):
         sword.x, sword.y = play_mode.player1.x + 30, play_mode.player1.y
-        # boy.frame = (boy.frame + 1) % 8
-        # sword.x += sword.dir * RUN_SPEED_PPS * game_framework.frame_time
-        # sword.x = clamp(25, sword.x, 1600 - 25)
 
     @staticmethod
     def draw(sword):
@@ -127,10 +121,7 @@ class StateMachine:
 class Sword:
     def __init__(self):
         self.x, self.y = play_mode.player1.x + 30, play_mode.player1.y
-        self.frame = 0
-        self.face_dir = 1
         self.dir = 1
-        self.delaytime = 0
         self.state_machine = StateMachine(self)
         self.state_machine.start()
 
@@ -145,7 +136,9 @@ class Sword:
         draw_rectangle(*self.get_bb())
 
     def get_bb(self):
-        return self.x - 10, self.y - 10, self.x + 60, self.y + 20
+        return self.x - 10, self.y, self.x + 30, self.y + 15
+
+
 
 
     def handle_collision(self, group, other):

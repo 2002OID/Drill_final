@@ -1,10 +1,11 @@
 # 이것은 각 상태들을 객체로 구현한 것임.
 
 from pico2d import get_time, load_image, load_font, clamp, SDL_KEYDOWN, SDL_KEYUP, SDLK_SPACE, SDLK_LEFT, SDLK_RIGHT, \
-    draw_rectangle, SDLK_w, SDLK_a, SDLK_d
+    draw_rectangle, SDLK_w, SDLK_a, SDLK_d, delay
 
 import game_world
 import game_framework
+import play_mode
 
 sheet_x = 379
 sheet_y = 408
@@ -63,6 +64,8 @@ class Idle:
 
     @staticmethod
     def exit(player, e):
+        if w_down(e):
+            player.attack()
         pass
 
     @staticmethod
@@ -92,10 +95,10 @@ class Run:
 
     @staticmethod
     def do(player):
-        # boy.frame = (boy.frame + 1) % 8
+
         player.x += player.dir * RUN_SPEED_PPS * game_framework.frame_time
-        player.x = clamp(25, player.x, 1600 - 25)
-        #boy.frame = (boy.frame + FRAMES_PER_ACTION * ACTION_PER_TIME * game_framework.frame_time) % 8
+        player.x = clamp(50, player.x, 1200 - 50 - 1)
+
 
     @staticmethod
     def draw(player):
@@ -109,7 +112,7 @@ class StateMachine:
         self.player = player
         self.cur_state = Idle
         self.transitions = {
-            Idle: {d_down: Run, a_down: Run, a_up: Run, d_up: Run},
+            Idle: {d_down: Run, a_down: Run, a_up: Run, d_up: Run, w_down: Idle},
             Run: {d_down: Idle, a_down: Idle, d_up: Idle, a_up: Idle, w_down: Run},
 
         }
@@ -137,8 +140,6 @@ class StateMachine:
 class Player:
     def __init__(self):
         self.x, self.y = 150, 140
-        self.frame = 0
-        # self.action = 3
         self.face_dir = 1
         self.dir = 1
         self.delaytime = 0
@@ -158,6 +159,14 @@ class Player:
 
     def get_bb(self):
         return self.x - 50, self.y - 60, self.x + 10, self.y + 45
+
+    def attack(self):
+        print('attack')
+        play_mode.sword.x += 20
+        play_mode.update()
+        play_mode.draw()
+        delay(0.35)
+        play_mode.sword.x -= 20
 
     def handle_collision(self, group, other):
         pass

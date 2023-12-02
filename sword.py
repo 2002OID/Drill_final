@@ -26,6 +26,7 @@ def a_up(e):
 def w_down(e):
     return e[0] == 'INPUT' and e[1].type == SDL_KEYDOWN and e[1].key == SDLK_w
 
+
 def time_out(e):
     return e[0] == 'TIME_OUT'
 
@@ -42,6 +43,7 @@ TIME_PER_ACTION = 0.5
 ACTION_PER_TIME = 1.0 / TIME_PER_ACTION
 FRAMES_PER_ACTION = 6
 
+
 class Run:
 
     @staticmethod
@@ -54,7 +56,6 @@ class Run:
 
     @staticmethod
     def exit(sword, e):
-
         pass
 
     @staticmethod
@@ -64,40 +65,33 @@ class Run:
         # sword.x += sword.dir * RUN_SPEED_PPS * game_framework.frame_time
         # sword.x = clamp(25, sword.x, 1600 - 25)
 
-
     @staticmethod
     def draw(sword):
         pass
+
 
 class Idle:
 
     @staticmethod
     def enter(sword, e):
-
         pass
 
     @staticmethod
     def exit(sword, e):
-        if w_down(e):
-            sword.attack()
-
         pass
 
     @staticmethod
     def update(sword, e):
-
         pass
 
     @staticmethod
     def do(sword):
         pass
 
-
-
     @staticmethod
     def draw(sword):
         pass
-        #boy.image.clip_draw(int(boy.frame) * 100, boy.action * 100, 95, 85, boy.x, boy.y)
+        # boy.image.clip_draw(int(boy.frame) * 100, boy.action * 100, 95, 85, boy.x, boy.y)
 
 
 class StateMachine:
@@ -134,14 +128,11 @@ class Sword:
     def __init__(self):
         self.x, self.y = play_mode.player1.x + 30, play_mode.player1.y
         self.frame = 0
-        # self.action = 3
         self.face_dir = 1
         self.dir = 1
         self.delaytime = 0
-        #self.image = load_image('character.png')
         self.state_machine = StateMachine(self)
         self.state_machine.start()
-
 
     def update(self):
         self.state_machine.update()
@@ -156,13 +147,6 @@ class Sword:
     def get_bb(self):
         return self.x - 10, self.y - 10, self.x + 60, self.y + 20
 
-    def attack(self):
-        print('attack')
-        self.x += 20
-        play_mode.update()
-        play_mode.draw()
-        delay(0.35)
-        self.x -= 20
 
     def handle_collision(self, group, other):
         pass

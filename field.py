@@ -9,7 +9,7 @@ class Field:
 
     def draw(self):
 
-        self.image.composite_draw(0, '', 600, 27, 1200, 55)
+        self.image.composite_draw(0, '', 600, 27, 1200, 110)
 
 
     def get_bb(self):

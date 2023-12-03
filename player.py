@@ -1,14 +1,14 @@
 # 이것은 각 상태들을 객체로 구현한 것임.
 
 from pico2d import get_time, load_image, load_font, clamp, SDL_KEYDOWN, SDL_KEYUP, SDLK_SPACE, SDLK_LEFT, SDLK_RIGHT, \
-    draw_rectangle, SDLK_w, SDLK_a, SDLK_d, delay
+    draw_rectangle, SDLK_w, SDLK_a, SDLK_d, delay, update_canvas
 
 import game_world
 import game_framework
 import play_mode
 
 sheet_x = 379
-sheet_y = 408
+sheet_y = 340
 def d_down(e):
     return e[0] == 'INPUT' and e[1].type == SDL_KEYDOWN and e[1].key == SDLK_d
 
@@ -76,7 +76,7 @@ class Idle:
 
     @staticmethod
     def draw(player):
-        player.image.clip_composite_draw(0, (sheet_y // 6) * 0 , 60, sheet_y // 6, 0, '',  player.x, player.y, 60 * 2, sheet_y // 6 * 2)
+        player.image.clip_composite_draw(0, 0 , 58, sheet_y // 5, 0, '',  player.x, player.y, 60 * 2, sheet_y // 5 * 2)
 
 
 class Run:
@@ -102,7 +102,7 @@ class Run:
 
     @staticmethod
     def draw(player):
-        player.image.clip_composite_draw(43, (sheet_y // 6) * 5 , 45, sheet_y // 6, 0, '',  player.x, player.y, 45 * 2, sheet_y // 6 * 2)
+        player.image.clip_composite_draw(0, 275, 43, 60, 0, '',  player.x, player.y, 44 * 2, 60 * 2)
 
 
 
@@ -162,11 +162,13 @@ class Player:
 
     def attack(self):
         print('attack')
-        play_mode.sword.x += 20
+        play_mode.sword.x += 33
         play_mode.update()
         play_mode.draw()
+        self.image.clip_composite_draw(55, 1, 72, sheet_y // 5, 0, '',  self.x + 23, self.y, 72 * 2, sheet_y // 5 * 2)
+        update_canvas()
         delay(0.35)
-        play_mode.sword.x -= 20
+        play_mode.sword.x -= 33
 
     def handle_collision(self, group, other):
         pass

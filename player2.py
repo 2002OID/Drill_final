@@ -1,7 +1,7 @@
 # 이것은 각 상태들을 객체로 구현한 것임.
 
 from pico2d import get_time, load_image, load_font, clamp, SDL_KEYDOWN, SDL_KEYUP, SDLK_SPACE, SDLK_LEFT, SDLK_RIGHT, \
-    draw_rectangle, SDLK_w, SDLK_a, SDLK_d, delay, update_canvas
+    draw_rectangle, SDLK_i, SDLK_j, SDLK_l, delay, update_canvas
 
 import game_world
 import game_framework
@@ -9,27 +9,24 @@ import play_mode
 
 sheet_x = 379
 sheet_y = 340
-def d_down(e):
-    return e[0] == 'INPUT' and e[1].type == SDL_KEYDOWN and e[1].key == SDLK_d
+def l_down(e):
+    return e[0] == 'INPUT' and e[1].type == SDL_KEYDOWN and e[1].key == SDLK_l
 
 
-def d_up(e):
-    return e[0] == 'INPUT' and e[1].type == SDL_KEYUP and e[1].key == SDLK_d
+def l_up(e):
+    return e[0] == 'INPUT' and e[1].type == SDL_KEYUP and e[1].key == SDLK_l
 
 
-def a_down(e):
-    return e[0] == 'INPUT' and e[1].type == SDL_KEYDOWN and e[1].key == SDLK_a
+def j_down(e):
+    return e[0] == 'INPUT' and e[1].type == SDL_KEYDOWN and e[1].key == SDLK_j
 
 
-def a_up(e):
-    return e[0] == 'INPUT' and e[1].type == SDL_KEYUP and e[1].key == SDLK_a
+def j_up(e):
+    return e[0] == 'INPUT' and e[1].type == SDL_KEYUP and e[1].key == SDLK_j
 
 
-def w_down(e):
-    return e[0] == 'INPUT' and e[1].type == SDL_KEYDOWN and e[1].key == SDLK_w
-
-def time_out(e):
-    return e[0] == 'TIME_OUT'
+def i_down(e):
+    return e[0] == 'INPUT' and e[1].type == SDL_KEYDOWN and e[1].key == SDLK_i
 
 def time_out(e):
     return e[0] == 'TIME_OUT'
@@ -64,7 +61,7 @@ class Idle:
 
     @staticmethod
     def exit(player, e):
-        if w_down(e):
+        if i_down(e):
             player.attack()
         pass
 
@@ -76,16 +73,16 @@ class Idle:
 
     @staticmethod
     def draw(player):
-        player.image.clip_composite_draw(0, 0 , 58, sheet_y // 5, 0, '',  player.x, player.y, 60 * 2, sheet_y // 5 * 2)
+        player.image.clip_composite_draw(0, 0 , 58, sheet_y // 5, 0, 'h',  player.x, player.y, 60 * 2, sheet_y // 5 * 2)
 
 
 class Run:
 
     @staticmethod
     def enter(player, e):
-        if d_down(e) or a_up(e):  # 오른쪽으로 RUN
+        if l_down(e) or j_up(e):  # 오른쪽으로 RUN
             player.dir, player.action, player.face_dir = 1, 1, 1
-        elif a_down(e) or d_up(e):  # 왼쪽으로 RUN
+        elif j_down(e) or l_up(e):  # 왼쪽으로 RUN
             player.dir, player.action, player.face_dir = -1, 0, -1
 
     @staticmethod
@@ -102,7 +99,7 @@ class Run:
 
     @staticmethod
     def draw(player):
-        player.image.clip_composite_draw(0, 275, 43, 60, 0, '',  player.x, player.y, 44 * 2, 60 * 2)
+        player.image.clip_composite_draw(0, 275, 43, 60, 0, 'h',  player.x, player.y, 44 * 2, 60 * 2)
 
 
 
@@ -112,8 +109,8 @@ class StateMachine:
         self.player = player
         self.cur_state = Idle
         self.transitions = {
-            Idle: {d_down: Run, a_down: Run, a_up: Run, d_up: Run, w_down: Idle},
-            Run: {d_down: Idle, a_down: Idle, d_up: Idle, a_up: Idle, w_down: Run},
+            Idle: {l_down: Run, j_down: Run, j_up: Run, l_up: Run, i_down: Idle},
+            Run: {l_down: Idle, j_down: Idle, l_up: Idle, j_up: Idle, i_down: Run},
 
         }
 
@@ -137,9 +134,9 @@ class StateMachine:
         self.cur_state.draw(self.player)
 
 
-class Player:
+class Player2:
     def __init__(self):
-        self.x, self.y = 150, 140
+        self.x, self.y = 1000, 140
         self.face_dir = 1
         self.dir = 1
         self.delaytime = 0
@@ -158,17 +155,17 @@ class Player:
         draw_rectangle(*self.get_bb())
 
     def get_bb(self):
-        return self.x - 50, self.y - 60, self.x + 10, self.y + 45
+        return self.x - 10, self.y - 60, self.x + 50, self.y + 45
 
     def attack(self):
         print('attack')
-        play_mode.sword.x += 33
+        play_mode.sword.x -= 33
         play_mode.update()
         play_mode.draw()
-        self.image.clip_composite_draw(55, 1, 72, sheet_y // 5, 0, '',  self.x + 23, self.y, 72 * 2, sheet_y // 5 * 2)
+        self.image.clip_composite_draw(55, 1, 72, sheet_y // 5, 0, 'h',  self.x - 23, self.y, 72 * 2, sheet_y // 5 * 2)
         update_canvas()
-        delay(0.35)
-        play_mode.sword.x -= 33
+        delay(0.1)
+        play_mode.sword.x += 33
 
     def handle_collision(self, group, other):
         pass

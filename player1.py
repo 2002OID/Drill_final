@@ -162,13 +162,13 @@ class Player1:
 
     def attack(self):
         print('attack')
-        play_mode.sword.x += 33
+        play_mode.sword1.x += 33
         play_mode.update()
         play_mode.draw()
         self.image.clip_composite_draw(55, 1, 72, sheet_y // 5, 0, '',  self.x + 23, self.y, 72 * 2, sheet_y // 5 * 2)
         update_canvas()
         delay(0.1)
-        play_mode.sword.x -= 33
+        play_mode.sword1.x -= 33
 
     def handle_collision(self, group, other):
         pass

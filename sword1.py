@@ -118,7 +118,7 @@ class StateMachine:
         self.cur_state.draw(self.sword)
 
 
-class Sword:
+class Sword1:
     def __init__(self):
         self.x, self.y = play_mode.player1.x + 30, play_mode.player1.y
         self.dir = 1

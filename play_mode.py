@@ -7,6 +7,7 @@ import game_world
 from field import Field
 from player import Player
 from sword import Sword
+from background import Background
 
 
 def handle_events():
@@ -24,6 +25,10 @@ def init():
     global player1
     global field
     global sword
+    global background
+
+    background = Background()
+    game_world.add_object(background, 0)
 
     field = Field()
     game_world.add_object(field, 0)

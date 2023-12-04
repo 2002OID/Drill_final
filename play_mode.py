@@ -8,6 +8,7 @@ from field import Field
 from player1 import Player1
 from player2 import Player2
 from sword1 import Sword1
+from sword2 import Sword2
 from background import Background
 
 
@@ -22,11 +23,12 @@ def handle_events():
             player1.handle_event(event)
             player2.handle_event(event)
             sword1.handle_event(event)
+            sword2.handle_event(event)
 
 def init():
     global player1, player2
     global field
-    global sword1
+    global sword1, sword2
     global background
 
     background = Background()
@@ -43,6 +45,9 @@ def init():
 
     sword1 = Sword1()
     game_world.add_object(sword1, 1)
+
+    sword2 = Sword2()
+    game_world.add_object(sword2, 1)
 
 
 def finish():

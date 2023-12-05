@@ -1,4 +1,3 @@
-import random
 
 from pico2d import *
 import game_framework
@@ -48,6 +47,9 @@ def init():
 
     sword2 = Sword2()
     game_world.add_object(sword2, 1)
+
+    game_world.add_collision_pair('p1:s2', player1, sword2)
+    game_world.add_collision_pair('p2:s1', player2, sword1)
 
 
 def finish():

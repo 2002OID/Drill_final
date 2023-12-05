@@ -142,4 +142,6 @@ class Sword1:
 
 
     def handle_collision(self, group, other):
-        pass
+        match group:
+            case 'p2:s1':
+                print('p1 win')

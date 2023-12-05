@@ -10,7 +10,8 @@ from sword1 import Sword1
 from sword2 import Sword2
 from background import Background
 
-
+score1=0
+score2=0
 def handle_events():
     events = get_events()
     for event in events:

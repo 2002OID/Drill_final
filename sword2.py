@@ -144,4 +144,5 @@ class Sword2:
         match group:
             case 'p1:s2':
                 print('p2 win')
+                play_mode.score2 += 1
                 play_mode.restart()

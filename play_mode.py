@@ -53,6 +53,10 @@ def init():
 
 
 def finish():
+    game_world.remove_object(player1)
+    game_world.remove_object(player2)
+    game_world.remove_object(sword1)
+    game_world.remove_object(sword2)
     game_world.clear()
     pass
 
@@ -73,3 +77,6 @@ def pause():
 def resume():
     pass
 
+def restart():
+    finish()
+    init()

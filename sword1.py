@@ -133,7 +133,7 @@ class Sword1:
 
     def draw(self):
         self.state_machine.draw()
-        draw_rectangle(*self.get_bb())
+        #draw_rectangle(*self.get_bb())
 
     def get_bb(self):
         return self.x - 10, self.y, self.x + 30, self.y + 15

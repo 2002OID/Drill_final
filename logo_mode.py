@@ -23,7 +23,7 @@ def update():
 
 def draw():
     clear_canvas()
-    image.draw(400, 300)
+    image.composite_draw(0,'',600,300,1200,600)
     update_canvas()
     pass
 

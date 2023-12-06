@@ -2,6 +2,7 @@ from pico2d import *
 import game_framework
 
 import game_world
+import purse_mode
 from field import Field
 from player1 import Player1
 from player2 import Player2
@@ -20,6 +21,8 @@ def handle_events():
             game_framework.quit()
         elif event.type == SDL_KEYDOWN and event.key == SDLK_ESCAPE:
             game_framework.quit()
+        elif event.type == SDL_KEYDOWN and event.key == SDLK_SPACE:
+            game_framework.push_mode(purse_mode)
         else:
             player1.handle_event(event)
             player2.handle_event(event)

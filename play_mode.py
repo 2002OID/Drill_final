@@ -69,9 +69,13 @@ def update():
     game_world.handle_collisions()
 
 
+
 def draw():
+    global finish_time
     clear_canvas()
     game_world.render()
+
+
     update_canvas()
 
 

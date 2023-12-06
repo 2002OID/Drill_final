@@ -1,4 +1,3 @@
-
 from pico2d import *
 import game_framework
 
@@ -10,8 +9,10 @@ from sword1 import Sword1
 from sword2 import Sword2
 from background import Background
 
-score1=0
-score2=0
+score1 = 0
+score2 = 0
+
+
 def handle_events():
     events = get_events()
     for event in events:
@@ -24,6 +25,7 @@ def handle_events():
             player2.handle_event(event)
             sword1.handle_event(event)
             sword2.handle_event(event)
+
 
 def init():
     global player1, player2
@@ -39,7 +41,7 @@ def init():
 
     player1 = Player1()
     game_world.add_object(player1, 1)
-    
+
     player2 = Player2()
     game_world.add_object(player2, 1)
 
@@ -72,11 +74,14 @@ def draw():
     game_world.render()
     update_canvas()
 
+
 def pause():
     pass
 
+
 def resume():
     pass
+
 
 def restart():
     finish()

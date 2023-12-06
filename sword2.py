@@ -26,6 +26,7 @@ def j_up(e):
 def i_down(e):
     return e[0] == 'INPUT' and e[1].type == SDL_KEYDOWN and e[1].key == SDLK_i
 
+
 def time_out(e):
     return e[0] == 'TIME_OUT'
 
@@ -48,7 +49,6 @@ class Run:
     @staticmethod
     def enter(sword, e):
         pass
-
 
     @staticmethod
     def exit(sword, e):
@@ -132,13 +132,10 @@ class Sword2:
 
     def draw(self):
         self.state_machine.draw()
-        #draw_rectangle(*self.get_bb())
+        # draw_rectangle(*self.get_bb())
 
     def get_bb(self):
         return self.x - 30, self.y, self.x + 10, self.y + 15
-
-
-
 
     def handle_collision(self, group, other):
         match group:

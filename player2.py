@@ -9,6 +9,8 @@ import play_mode
 
 sheet_x = 379
 sheet_y = 340
+
+
 def l_down(e):
     return e[0] == 'INPUT' and e[1].type == SDL_KEYDOWN and e[1].key == SDLK_l
 
@@ -28,9 +30,9 @@ def j_up(e):
 def i_down(e):
     return e[0] == 'INPUT' and e[1].type == SDL_KEYDOWN and e[1].key == SDLK_i
 
+
 def time_out(e):
     return e[0] == 'TIME_OUT'
-
 
 
 # 수정 예정
@@ -68,12 +70,11 @@ class Idle:
     @staticmethod
     def do(player):
         pass
-        #boy.frame = (boy.frame + FRAMES_PER_ACTION * ACTION_PER_TIME * game_framework.frame_time) % 8
-
+        # boy.frame = (boy.frame + FRAMES_PER_ACTION * ACTION_PER_TIME * game_framework.frame_time) % 8
 
     @staticmethod
     def draw(player):
-        player.image.clip_composite_draw(0, 0 , 58, sheet_y // 5, 0, 'h',  player.x, player.y, 60 * 2, sheet_y // 5 * 2)
+        player.image.clip_composite_draw(0, 0, 58, sheet_y // 5, 0, 'h', player.x, player.y, 60 * 2, sheet_y // 5 * 2)
 
 
 class Run:
@@ -96,12 +97,9 @@ class Run:
         player.x += player.dir * RUN_SPEED_PPS * game_framework.frame_time
         player.x = clamp(50, player.x, 1200 - 50 - 1)
 
-
     @staticmethod
     def draw(player):
-        player.image.clip_composite_draw(0, 275, 43, 60, 0, 'h',  player.x, player.y, 44 * 2, 60 * 2)
-
-
+        player.image.clip_composite_draw(0, 275, 43, 60, 0, 'h', player.x, player.y, 44 * 2, 60 * 2)
 
 
 class StateMachine:
@@ -152,7 +150,7 @@ class Player2:
 
     def draw(self):
         self.state_machine.draw()
-        #draw_rectangle(*self.get_bb())
+        # draw_rectangle(*self.get_bb())
 
     def get_bb(self):
         return self.x - 10, self.y - 60, self.x + 50, self.y + 45
@@ -162,7 +160,7 @@ class Player2:
         play_mode.sword2.x -= 33
         play_mode.update()
         play_mode.draw()
-        self.image.clip_composite_draw(56, 1, 72, sheet_y // 5, 0, 'h',  self.x - 23, self.y, 72 * 2, sheet_y // 5 * 2)
+        self.image.clip_composite_draw(56, 1, 72, sheet_y // 5, 0, 'h', self.x - 23, self.y, 72 * 2, sheet_y // 5 * 2)
         update_canvas()
         delay(0.1)
         play_mode.sword2.x += 33

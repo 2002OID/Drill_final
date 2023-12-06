@@ -41,7 +41,7 @@ def time_out(e):
 
 # 수정 예정
 PIXEL_PER_METER = (1200.0 / 14.0)  # 10 pixel 30 cm
-RUN_SPEED_KMPH = 10.0  # Km / Hour
+RUN_SPEED_KMPH = 5.0  # Km / Hour
 RUN_SPEED_MPM = (RUN_SPEED_KMPH * 1000.0 / 60.0)
 RUN_SPEED_MPS = (RUN_SPEED_MPM / 60.0)
 RUN_SPEED_PPS = (RUN_SPEED_MPS * PIXEL_PER_METER)
@@ -138,7 +138,7 @@ class StateMachine:
 
 class Player1:
     def __init__(self):
-        self.x, self.y = 150, 140
+        self.x, self.y = 300, 140
         self.face_dir = 1
         self.dir = 1
         self.delaytime = 0
